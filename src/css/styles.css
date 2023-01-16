@@ -1,0 +1,10 @@
+.load-more {
+	border: 1px solid #ccc;
+	background-color: blueviolet;
+	font-size: larger;
+	outline: none;
+	cursor: pointer;
+	padding: 10px 12px;
+	display: none;
+	margin: auto;
+}
