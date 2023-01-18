@@ -1,10 +1,63 @@
 .load-more {
-	border: 1px solid #ccc;
-	background-color: blueviolet;
-	font-size: larger;
+  display: none;
+  margin: auto;
+
+  background-color: #f1f1f1;
+  color: black;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
+	  0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+}
+
+.btn:hover {
+	background-color: rgb(76, 73, 73);
+	color: white;
+	border: none;
+}
+.search-form {
+	padding: 15px;
+	background-color: rgb(121, 112, 176);
+	position: sticky;
+	top: 0;
+	display: flex;
+	margin-left: auto;
+	margin-right: auto;
+	justify-content: center;
+}
+
+input {
 	outline: none;
-	cursor: pointer;
-	padding: 10px 12px;
-	display: none;
-	margin: auto;
+}
+
+.gallery {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+}
+
+.photo-card {
+	flex-basis: calc((100% - 60px) / 6);
+	/* margin: 5px; */
+}
+
+img {
+	width: 300px;
+	height: 190px;
+}
+
+.info {
+	display: flex;
+	gap: 10px;
+}
+
+b {
+	font-size: 12px;
 }
