@@ -155,7 +155,7 @@ function checkHits(response) {
   remainingHits = totalHits - takenHits;
   console.log('remainingHits:', remainingHits);
 
-  if (takenHits <= 40) {
+  if (takenHits <= 40 && takenHits > 0) {
     Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
   }
 
