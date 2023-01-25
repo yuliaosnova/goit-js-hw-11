@@ -41,7 +41,7 @@ function onSubmit(e) {
   e.preventDefault();
 
   inputValue = e.currentTarget.elements.searchQuery.value.trim();
-  console.log('inputValue', inputValue);
+  console.log('inputValue:', inputValue);
   // Свойство elements DOM-элемента формы содержит обьект со ссылками на все её элементы у которых есть атрибут name.
 
   if (inputValue === '') {
@@ -74,7 +74,7 @@ async function fetchPictures() {
         per_page: 40,
       },
     });
-
+	 console.log(response);
     return response;
   } catch (error) {
     console.log(error);
@@ -149,6 +149,7 @@ function clearGallery() {
 
 function checkHits(response) {
   totalHits = response.data.totalHits;
+  console.log('totalHits:', totalHits);
   takenHits = galleryCollection.length;
   console.log('takenHits:', takenHits);
   remainingHits = totalHits - takenHits;
