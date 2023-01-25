@@ -55,8 +55,9 @@ function onSubmit(e) {
 
 async function getPictures() {
   const apiResponse = await fetchPictures();
-  const pictures = createGallery(apiResponse);
   checkHits(apiResponse);
+  const pictures = createGallery(apiResponse);
+  
   createGalleryMarkup(pictures);
 }
 
