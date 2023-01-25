@@ -150,15 +150,15 @@ function clearGallery() {
 }
 
 function checkHits(response) {
-  totalHits = response.data.totalHits;
-  console.log('totalHits:', totalHits);
+  totHits = response.data.totalHits;
+  console.log('totalHits:', totHits);
   takenHits = galleryCollection.length;
   console.log('takenHits:', takenHits);
-  remainingHits = totalHits - takenHits;
+  remainingHits = totHits - takenHits;
   console.log('remainingHits:', remainingHits);
 
   if (takenHits <= 40 && takenHits > 0) {
-    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+    Notiflix.Notify.success(`Hooray! We found ${totHits} images.`);
   }
 
   if (remainingHits <= 0 && takenHits > 40) {
