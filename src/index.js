@@ -1,7 +1,7 @@
 // import { debounce } from 'lodash';
 import Notiflix from 'notiflix';
 
-import SimpleLightbox from "simplelightbox/dist/simple-lightbox.esm";
+import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
 import './css/styles.css';
@@ -18,13 +18,15 @@ const refs = {
 };
 const gallery = document.querySelector('.gallery');
 
-new SimpleLightbox('.gallery a', { 
-	captionsData: 'alt',
-	captionsDelay: 250,
-	animationSpeed: 250,
-	nav: true,
-	close: true,
-});
+// new SimpleLightbox('.gallery a', { 
+// 	captionsData: 'alt',
+// 	captionsDelay: 250,
+// 	animationSpeed: 250,
+// 	nav: true,
+// 	close: true,
+// });
+
+var lightbox = new SimpleLightbox('.gallery a');
 
 let page = 1;
 let inputValue = '';
@@ -58,6 +60,7 @@ async function getPictures() {
   const pictures = createGallery(apiResponse);
   checkHits(apiResponse);
   createGalleryMarkup(pictures);
+  lightbox.refresh();
 }
 
 async function fetchPictures() {
