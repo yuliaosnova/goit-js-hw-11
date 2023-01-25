@@ -144,7 +144,6 @@ function clearGallery() {
   gallery.innerHTML = '';
   galleryCollection = [];
   takenHits = 0;
-  refs.loadMoreBtn.style.display = 'none';
   hideLoadMoreBtn();
 }
 
