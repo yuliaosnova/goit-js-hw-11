@@ -13,7 +13,7 @@ const AUTHORIZATION_KEY = '32884302-6b7a2916d20909a9c43654aba';
 const refs = {
   searchForm: document.querySelector('#search-form'),
   button: document.querySelector('#button'),
-  //   gallery: document.querySelector('.gallery'),
+// gallery: document.querySelector('.gallery'),
   loadMoreBtn: document.querySelector('.load-more'),
 };
 const gallery = document.querySelector('.gallery');
@@ -55,11 +55,9 @@ function onSubmit(e) {
 
 async function getPictures() {
   const apiResponse = await fetchPictures();
-
   const pictures = createGallery(apiResponse);
   checkHits(apiResponse);
   createGalleryMarkup(pictures);
-  gallery.refresh();
 }
 
 async function fetchPictures() {
@@ -95,7 +93,7 @@ function createGallery(response) {
   }
 
   galleryCollection.push(...pictures);
-  //   console.log('galleryCollection in createGallery', galleryCollection);
+
   incrementPage();
 
   return pictures;
@@ -112,7 +110,7 @@ function resetPage() {
 }
 
 function createGalleryMarkup(pictures) {
-  // console.log("galleryCollection in murkup:", galleryCollection);
+ 
   const markup = pictures.map(({ largeImageURL, webformatURL, likes, views, comments, downloads }) => {
     return `
 	<div class="photo-card">
