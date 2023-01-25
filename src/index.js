@@ -20,18 +20,15 @@ const gallery = document.querySelector('.gallery');
 let page = 1;
 let inputValue = '';
 let galleryCollection = [];
-let totalHits = 0;
-let remainingHits = 0;
 let takenHits = 0;
 
 refs.searchForm.addEventListener('submit', onSubmit);
 refs.loadMoreBtn.addEventListener('click', getPictures);
 
-
-new SimpleLightbox('.gallery a', { 
-	captionsData: 'alt',
-	captionsDelay: 250,
-	animationSpeed: 250,
+new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionsDelay: 250,
+  animationSpeed: 250,
 });
 
 // const { height: cardHeight } = document
@@ -43,28 +40,34 @@ new SimpleLightbox('.gallery a', {
 //   behavior: "smooth",
 // });
 
-
 function onSubmit(e) {
   e.preventDefault();
 
-  galleryCollection = [];
   inputValue = e.currentTarget.elements.searchQuery.value.trim();
-  console.log(inputValue);
+  console.log('inputValue', inputValue);
   // Свойство elements DOM-элемента формы содержит обьект со ссылками на все её элементы у которых есть атрибут name.
 
   if (inputValue === '') {
     clearGallery();
     return;
   }
-
+  resetPage();
+  clearGallery();
   getPictures();
-  //   createTotalHitsMessage(totalHits);
-  //   checkRemainingHits();
 }
 
-function getPictures() {
-  axios
-    .get(BASE_URL, {
+async function getPictures() {
+  const apiResponse = await fetchPictures();
+
+  const pictures = createGallery(apiResponse);
+  checkHits(apiResponse);
+  createGalleryMarkup(pictures);
+}
+
+async function fetchPictures() {
+  try {
+    console.log('page before fetch:', page);
+    const response = await axios.get(BASE_URL, {
       params: {
         key: AUTHORIZATION_KEY,
         q: inputValue,
@@ -74,46 +77,48 @@ function getPictures() {
         page: page,
         per_page: 40,
       },
-    })
-    .then(response => {
-      console.log(response);
-      totalHits = response.data.totalHits;
-      console.log(totalHits);
-
-      clearGallery();
-      const pictures = response.data.hits;
-      // console.log(pictures);
-
-      if (pictures.length === 0) {
-        Notiflix.Notify.info(
-          'Sorry, there are no images matching your search query. Please try again.'
-        );
-      }
-
-      galleryCollection.push(...pictures);
-
-      createGallery(galleryCollection);
-
-      page += 1;
-
-      if (page > 1) {
-        refs.loadMoreBtn.style.display = 'block';
-      }
-
-      // gallery.refresh();
-
-      checkRemainingHits();
-    })
-    .catch(error => {
-      console.log(error);
     });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-function createGallery(pictures) {
+function createGallery(response) {
+  const pictures = response.data.hits;
+  console.log(pictures);
+
+  if (pictures.length === 0) {
+    Notiflix.Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+    return;
+  }
+
+  galleryCollection.push(...pictures);
+  //   console.log('galleryCollection in createGallery', galleryCollection);
+  incrementPage();
+
+  return pictures;
+}
+
+function incrementPage() {
+  page += 1;
+  console.log('page incremented:', page);
+}
+
+function resetPage() {
+  page = 1;
+  console.log('page reset:', page);
+}
+
+function createGalleryMarkup(pictures) {
+  // console.log("galleryCollection in murkup:", galleryCollection);
   const markup = pictures.map(picture => {
     return `
 	<div class="photo-card">
-	 	<a href="${picture.largeImageURL}">
+	 	<a href="${picture.webformatURLL}">
 	 		<img src="${picture.webformatURL}" alt="" loading="lazy" />
 	 	</a>
 		<div class="info">
@@ -137,22 +142,42 @@ function createGallery(pictures) {
 
 function clearGallery() {
   gallery.innerHTML = '';
+  galleryCollection = [];
+  takenHits = 0;
+  refs.loadMoreBtn.style.display = 'none';
+  hideLoadMoreBtn();
 }
 
-function createTotalHitsMessage(totalHits) {
-  Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
-}
-
-function checkRemainingHits() {
-  takenHits += 40;
+function checkHits(response) {
+  totalHits = response.data.totalHits;
+  takenHits = galleryCollection.length;
+  console.log('takenHits:', takenHits);
   remainingHits = totalHits - takenHits;
-  console.log(remainingHits);
+  console.log('remainingHits:', remainingHits);
 
-  if (totalHits <= 0) {
-    refs.loadMoreBtn.style.display = 'none';
+  if (takenHits <= 40) {
+    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+  }
 
+  if (remainingHits <= 0 && takenHits > 40) {
     Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
     );
   }
+
+  if (remainingHits > 0) {
+    showLoadMoreBtn();
+  } else {
+    hideLoadMoreBtn();
+  }
+
+  return remainingHits;
+}
+
+function showLoadMoreBtn() {
+  refs.loadMoreBtn.style.display = 'block';
+}
+
+function hideLoadMoreBtn() {
+  refs.loadMoreBtn.style.display = 'none';
 }
