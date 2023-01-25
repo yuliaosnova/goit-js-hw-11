@@ -21,7 +21,6 @@ let page = 1;
 let inputValue = '';
 let galleryCollection = [];
 let takenHits = 0;
-let totalHits = 500;
 
 refs.searchForm.addEventListener('submit', onSubmit);
 refs.loadMoreBtn.addEventListener('click', getPictures);
