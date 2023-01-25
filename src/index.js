@@ -13,18 +13,10 @@ const AUTHORIZATION_KEY = '32884302-6b7a2916d20909a9c43654aba';
 const refs = {
   searchForm: document.querySelector('#search-form'),
   button: document.querySelector('#button'),
-// gallery: document.querySelector('.gallery'),
   loadMoreBtn: document.querySelector('.load-more'),
 };
 const gallery = document.querySelector('.gallery');
 
-// new SimpleLightbox('.gallery a', { 
-// 	captionsData: 'alt',
-// 	captionsDelay: 250,
-// 	animationSpeed: 250,
-// 	nav: true,
-// 	close: true,
-// });
 
 var lightbox = new SimpleLightbox('.gallery a');
 
@@ -35,8 +27,6 @@ let takenHits = 0;
 
 refs.searchForm.addEventListener('submit', onSubmit);
 refs.loadMoreBtn.addEventListener('click', getPictures);
-
-
 
 
 function onSubmit(e) {
@@ -65,7 +55,7 @@ async function getPictures() {
 
 async function fetchPictures() {
   try {
-    console.log('page before fetch:', page);
+   //  console.log('page before fetch:', page);
     const response = await axios.get(BASE_URL, {
       params: {
         key: AUTHORIZATION_KEY,
@@ -77,7 +67,7 @@ async function fetchPictures() {
         per_page: 40,
       },
     });
-	 console.log(response);
+	//  console.log(response);
     return response;
   } catch (error) {
     console.log(error);
@@ -87,8 +77,6 @@ async function fetchPictures() {
 function createGallery(response) {
   const pictures = response.data.hits;
   console.log(pictures);
-
-  console.log('totalHits in create Gallery', response.data.totalHits);
 
   if (pictures.length === 0) {
     Notiflix.Notify.failure(
@@ -106,12 +94,12 @@ function createGallery(response) {
 
 function incrementPage() {
   page += 1;
-  console.log('page incremented:', page);
+//   console.log('page incremented:', page);
 }
 
 function resetPage() {
   page = 1;
-  console.log('page reset:', page);
+//   console.log('page reset:', page);
 }
 
 function createGalleryMarkup(pictures) {
@@ -154,7 +142,7 @@ function clearGallery() {
 
 function checkHits(response) {
   const totHits = response.data.totalHits;
-  console.log('totalHits:', totHits);
+//   console.log('totalHits:', totHits);
   takenHits = galleryCollection.length;
   console.log('takenHits:', takenHits);
   const remainingHits = totHits - takenHits;
