@@ -1,7 +1,8 @@
 // import { debounce } from 'lodash';
 import Notiflix from 'notiflix';
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+
+import SimpleLightbox from "simplelightbox/dist/simple-lightbox.esm";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 import './css/styles.css';
 
@@ -17,6 +18,14 @@ const refs = {
 };
 const gallery = document.querySelector('.gallery');
 
+new SimpleLightbox('.gallery a', { 
+	captionsData: 'alt',
+	captionsDelay: 250,
+	animationSpeed: 250,
+	nav: true,
+	close: true,
+});
+
 let page = 1;
 let inputValue = '';
 let galleryCollection = [];
@@ -25,20 +34,8 @@ let takenHits = 0;
 refs.searchForm.addEventListener('submit', onSubmit);
 refs.loadMoreBtn.addEventListener('click', getPictures);
 
-new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionsDelay: 250,
-  animationSpeed: 250,
-});
 
-// const { height: cardHeight } = document
-//   .querySelector(".gallery")
-//   .firstElementChild.getBoundingClientRect();
 
-// window.scrollBy({
-//   top: cardHeight * 2,
-//   behavior: "smooth",
-// });
 
 function onSubmit(e) {
   e.preventDefault();
@@ -62,6 +59,7 @@ async function getPictures() {
   const pictures = createGallery(apiResponse);
   checkHits(apiResponse);
   createGalleryMarkup(pictures);
+  gallery.refresh();
 }
 
 async function fetchPictures() {
@@ -115,29 +113,33 @@ function resetPage() {
 
 function createGalleryMarkup(pictures) {
   // console.log("galleryCollection in murkup:", galleryCollection);
-  const markup = pictures.map(picture => {
+  const markup = pictures.map(({ largeImageURL, webformatURL, likes, views, comments, downloads }) => {
     return `
 	<div class="photo-card">
-	 	<a href="${picture.webformatURLL}">
-	 		<img src="${picture.webformatURL}" alt="" loading="lazy" />
+	 	<a href="${largeImageURL}">
+	 		<img src="${webformatURL}" alt="" loading="lazy" />
 	 	</a>
 		<div class="info">
 		  <p class="info-item">
-			 <b>Likes: ${picture.likes}</b>
+			 <b>Likes: ${likes}</b>
 		  </p>
 		  <p class="info-item">
-			 <b>Views: ${picture.views}</b>
+			 <b>Views: ${views}</b>
 		  </p>
 		  <p class="info-item">
-			 <b>Comments: ${picture.comments}</b>
+			 <b>Comments: ${comments}</b>
 		  </p>
 		  <p class="info-item">
-			 <b>Downloads: ${picture.downloads}</b>
+			 <b>Downloads: ${downloads}</b>
 		  </p>
 		</div>
 	 </div>`;
   });
   gallery.insertAdjacentHTML('beforeend', markup.join(''));
+
+  if (page > 2) {
+	smothScroll();
+  }
 }
 
 function clearGallery() {
@@ -180,3 +182,15 @@ function showLoadMoreBtn() {
 function hideLoadMoreBtn() {
   refs.loadMoreBtn.style.display = 'none';
 }
+
+function smothScroll() {
+	const { height: cardHeight } = document
+	.querySelector(".gallery")
+	.firstElementChild.getBoundingClientRect();
+ 
+ window.scrollBy({
+	top: cardHeight * 2,
+	behavior: "smooth",
+ });
+}
+
