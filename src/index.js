@@ -55,9 +55,8 @@ function onSubmit(e) {
 
 async function getPictures() {
   const apiResponse = await fetchPictures();
-  checkHits(apiResponse);
   const pictures = createGallery(apiResponse);
-  
+  checkHits(apiResponse);
   createGalleryMarkup(pictures);
 }
 
@@ -86,7 +85,7 @@ function createGallery(response) {
   const pictures = response.data.hits;
   console.log(pictures);
 
-  console.log(response.data.totalHits);
+  console.log('totalHits in create Gallery', response.data.totalHits);
 
   if (pictures.length === 0) {
     Notiflix.Notify.failure(
