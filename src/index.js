@@ -85,6 +85,8 @@ function createGallery(response) {
   const pictures = response.data.hits;
   console.log(pictures);
 
+  console.log(response.data.totalHits);
+
   if (pictures.length === 0) {
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
