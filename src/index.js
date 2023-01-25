@@ -150,11 +150,11 @@ function clearGallery() {
 }
 
 function checkHits(response) {
-  totHits = response.data.totalHits;
+  const totHits = response.data.totalHits;
   console.log('totalHits:', totHits);
   takenHits = galleryCollection.length;
   console.log('takenHits:', takenHits);
-  remainingHits = totHits - takenHits;
+  const remainingHits = totHits - takenHits;
   console.log('remainingHits:', remainingHits);
 
   if (takenHits <= 40 && takenHits > 0) {
